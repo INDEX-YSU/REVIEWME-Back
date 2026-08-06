@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<style>
+  @page { margin: 20mm 16mm 20mm 16mm; }
+  * { box-sizing: border-box; }
+  body {
+    font-family: "Noto Sans CJK KR", sans-serif;
+    font-size: 10.5px;
+    color: #1f2937;
+    line-height: 1.55;
+  }
+  .cover {
+    height: 250mm;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    page-break-after: always;
+  }
+  .cover .tag {
+    display: inline-block;
+    background: #eef2ff;
+    color: #4338ca;
+    font-size: 12px;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 18px;
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+  .cover h1 {
+    font-size: 34px;
+    margin: 0 0 10px 0;
+    color: #111827;
+  }
+  .cover .sub {
+    font-size: 14px;
+    color: #6b7280;
+    margin-bottom: 40px;
+  }
+  .cover table.meta {
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+  .cover table.meta td {
+    padding: 6px 18px;
+    border-top: 1px solid #e5e7eb;
+    text-align: left;
+  }
+  .cover table.meta td.k { color: #6b7280; font-weight: 700; }
+
+  h2.section {
+    font-size: 18px;
+    color: #ffffff;
+    background: linear-gradient(90deg, #4338ca, #6366f1);
+    padding: 8px 14px;
+    border-radius: 6px;
+    margin-top: 30px;
+    margin-bottom: 14px;
+    page-break-before: auto;
+  }
+  h3.endpoint {
+    font-size: 13px;
+    margin: 20px 0 6px 0;
+    padding-bottom: 4px;
+    border-bottom: 2px solid #e5e7eb;
+    color: #111827;
+  }
+  .badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 4px;
+    color: #fff;
+    margin-right: 8px;
+    min-width: 46px;
+    text-align: center;
+  }
+  .GET { background:#2563eb; }
+  .POST { background:#16a34a; }
+  .PUT { background:#d97706; }
+  .DELETE { background:#dc2626; }
+  .WS { background:#7c3aed; }
+
+  code.path {
+    font-family: "DejaVu Sans Mono", monospace;
+    font-size: 11px;
+    color: #111827;
+  }
+  .auth-tag {
+    font-size: 9.5px;
+    background: #fef3c7;
+    color: #92400e;
+    padding: 1px 7px;
+    border-radius: 10px;
+    margin-left: 6px;
+  }
+  .auth-tag.none {
+    background: #e5e7eb;
+    color: #374151;
+  }
+  .desc { margin: 4px 0 8px 0; color: #374151; }
+
+  table.spec {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 8px;
+    font-size: 9.7px;
+  }
+  table.spec th {
+    background: #f3f4f6;
+    text-align: left;
+    padding: 5px 7px;
+    border: 1px solid #e5e7eb;
+    color: #374151;
+    width: 15%;
+  }
+  table.spec td {
+    padding: 5px 7px;
+    border: 1px solid #e5e7eb;
+    vertical-align: top;
+  }
+
+  pre.code-block {
+    background: #0f172a;
+    color: #e2e8f0;
+    font-family: "DejaVu Sans Mono", monospace;
+    font-size: 9px;
+    padding: 10px 12px;
+    border-radius: 6px;
+    white-space: pre-wrap;
+    word-break: break-all;
+    margin: 6px 0 14px 0;
+    line-height: 1.5;
+  }
+  .flexrow { display: flex; gap: 12px; }
+  .flexrow .col { flex: 1; }
+  .note {
+    background: #f0f9ff;
+    border-left: 3px solid #0ea5e9;
+    padding: 8px 12px;
+    font-size: 9.7px;
+    color: #075985;
+    margin: 8px 0 16px 0;
+    border-radius: 3px;
+  }
+  table.common {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 10px;
+    margin-bottom: 14px;
+  }
+  table.common th {
+    background: #f3f4f6;
+    padding: 6px 8px;
+    border: 1px solid #e5e7eb;
+    text-align: left;
+  }
+  table.common td {
+    padding: 6px 8px;
+    border: 1px solid #e5e7eb;
+  }
+  .toc {
+    columns: 2;
+    font-size: 11px;
+    line-height: 2;
+  }
+  .toc div { color: #374151; }
+  .toc span.n { color: #4338ca; font-weight: 700; margin-right: 6px; }
+  footer.pagefoot {
+    font-size: 8.5px;
+    color: #9ca3af;
+    text-align: center;
+    margin-top: 4px;
+  }
+</style>
+</head>
+<body>
+
+<!-- COVER PAGE -->
+<div class="cover">
+  <div class="tag">API SPECIFICATION</div>
+  <table class="meta">
+    <tr><td class="k">문서 버전</td><td>v1.0</td></tr>
+    <tr><td class="k">작성일</td><td>2026-07-10</td></tr>
+    <tr><td class="k">Base URL</td><td>https://api.example.com/api/v1</td></tr>
+    <tr><td class="k">인증 방식</td><td>Bearer Access Token (JWT) + Refresh Token</td></tr>
+  </table>
+</div>
+
+<!-- OVERVIEW -->
+<h2 class="section">0. 공통 사항</h2>
+
+<h3 class="endpoint">0.1 공통 응답 포맷</h3>
+<div class="flexrow">
+<div class="col">
+<div class="desc">성공 응답</div>
+<pre class="code-block">{
+  "success": true,
+  "data": { ... },
+  "message": "OK"
+}</pre>
+</div>
+<div class="col">
+<div class="desc">실패 응답</div>
+<pre class="code-block">{
+  "success": false,
+  "error": {
+    "code": "POST_NOT_FOUND",
+    "message": "게시글을 찾을 수 없습니다."
+  }
+}</pre>
+</div>
+</div>
+
+<h3 class="endpoint">0.2 공통 에러 코드</h3>
+<table class="common">
+<tr><th>HTTP Status</th><th>code</th><th>설명</th></tr>
+<tr><td>400</td><td>INVALID_REQUEST</td><td>요청 파라미터/바디 형식 오류</td></tr>
+<tr><td>401</td><td>UNAUTHORIZED</td><td>인증 토큰 없음 또는 만료</td></tr>
+<tr><td>403</td><td>FORBIDDEN</td><td>권한 없음 (Guest 제한, 작성자 아님 등)</td></tr>
+<tr><td>404</td><td>NOT_FOUND</td><td>리소스 없음</td></tr>
+<tr><td>409</td><td>CONFLICT</td><td>중복 데이터 (이메일 중복 등)</td></tr>
+<tr><td>429</td><td>TOO_MANY_REQUESTS</td><td>요청 횟수 제한 초과</td></tr>
+<tr><td>500</td><td>INTERNAL_ERROR</td><td>서버 내부 오류</td></tr>
+</table>
+
+<h3 class="endpoint">0.3 인증 헤더</h3>
+<pre class="code-block">Authorization: Bearer {accessToken}</pre>
+
+<h3 class="endpoint">0.4 사용자 권한 등급</h3>
+<table class="common">
+<tr><th>등급</th><th>설명</th></tr>
+<tr><td>GUEST</td><td>로그인하지 않은 사용자. 게시글/댓글 조회만 가능, 작성·추천·채팅 불가</td></tr>
+<tr><td>USER</td><td>이메일/GitHub/Google 인증을 완료한 일반 회원</td></tr>
+<tr><td>ADMIN</td><td>운영자 권한 (게시글/댓글 삭제, 신고 처리 등)</td></tr>
+</table>
+
+<h3 class="endpoint">0.5 목차</h3>
+<div class="toc">
+<div><span class="n">1</span>회원가입 / 로그인 (이메일)</div>
+<div><span class="n">2</span>GitHub OAuth 로그인 / 연동</div>
+<div><span class="n">3</span>Google OAuth 로그인 / 연동</div>
+<div><span class="n">4</span>Guest 권한 처리</div>
+<div><span class="n">5</span>게시글 CRUD</div>
+<div><span class="n">6</span>게시글 검색 / 정렬</div>
+<div><span class="n">7</span>조회수 증가</div>
+<div><span class="n">8</span>추천 / 추천 취소</div>
+<div><span class="n">9</span>AI 게시글 요약</div>
+<div><span class="n">10</span>댓글</div>
+<div><span class="n">11</span>프로필 조회 / 수정</div>
+<div><span class="n">12</span>GitHub Repository 조회</div>
+<div><span class="n">13</span>채팅방 생성 / 조회 / 입장</div>
+<div><span class="n">14</span>WebSocket 채팅</div>
+<div><span class="n">15</span>Private 채팅방 초대</div>
+</div>
+
+<!-- 1. EMAIL AUTH -->
+<h2 class="section">1. 이메일 회원가입 / 로그인</h2>
+
+<h3 class="endpoint"><span class="badge POST">POST</span><code class="path">/auth/signup</code><span class="auth-tag none">인증 불필요</span></h3>
+<div class="desc">이메일/비밀번호 기반 회원가입</div>
+<table class="spec">
+<tr><th>Request Body</th><td>
+<pre class="code-block">{
+  "email": "user@example.com",
+  "password": "P@ssw0rd123",
+  "nickname": "ivor"
+}</pre>
+</td></tr>
+<tr><th>Response 201</th><td>
+<pre class="code-block">{
+  "success": true,
+  "data": {
+    "userId": "u_1029",
+    "email": "user@example.com",
+    "nickname": "ivor",
+    "role": "USER"
+  }
+}</pre>
+</td></tr>
+<tr><th>에러</th><td>409 EMAIL_ALREADY_EXISTS · 400 INVALID_REQUEST(비밀번호 정책 위반)</td></tr>
+</table>
+
+<h3 class="endpoint"><span class="badge POST">POST</span><code class="path">/auth/login</code><span class="auth-tag none">인증 불필요</span></h3>
+<div class="desc">이메일/비밀번호 로그인, Access/Refresh 토큰 발급</div>
+<table class="spec">
+<tr><th>Request Body</th><td>
+<pre class="code-block">{ "email": "user@example.com", "password": "P@ssw0rd123" }</pre>
+</td></tr>
+<tr><th>Response 200</th><td>
+<pre class="code-block">{
+  "success": true,
+  "data": {
+    "accessToken": "eyJhbGciOi...",
+    "refreshToken": "eyJhbGciOi...",
+    "expiresIn": 3600,
+    "user": { "userId": "u_1029", "nickname": "ivor", "role": "USER" }
+  }
+}</pre>
+</td></tr>
+<tr><th>에러</th><td>401 INVALID_CREDENTIALS</td></tr>
+</table>
+
+<h3 class="endpoint"><span class="badge POST">POST</span><code class="path">/auth/refresh</code><span class="auth-tag none">Refresh Token 필요</span></h3>
+<div class="desc">Refresh Token으로 Access Token 재발급</div>
+<table class="spec">
+<tr><th>Request Body</th><td><pre class="code-block">{ "refreshToken": "eyJhbGciOi..." }</pre></td></tr>
+<tr><th>Response 200</th><td><pre class="code-block">{ "success": true, "data": { "accessToken": "eyJ...", "expiresIn": 3600 } }</pre></td></tr>
+<tr><th>에러</th><td>401 INVALID_REFRESH_TOKEN</td></tr>
+</table>
+
+<h3 class="endpoint"><span class="badge POST">POST</span><code class="path">/auth/logout</code><span class="auth-tag">인증 필요</span></h3>
+<div class="desc">현재 Refresh Token 무효화</div>
+<table class="spec">
+<tr><th>Response 200</th><td><pre class="code-block">{ "success": true, "message": "로그아웃 되었습니다." }</pre></td></tr>
+</table>
+
+<!-- 2. GITHUB -->
+<h2 class="section">2. GitHub 로그인 / 연동</h2>
+
+<h3 class="endpoint"><span class="badge GET">GET</span><code class="path">/auth/github</code><span class="auth-tag none">인증 불필요</span></h3>
+<div class="desc">GitHub OAuth 인가 페이지로 리다이렉트</div>
+<table class="spec">
+<tr><th>Query</th><td>redirectUri (선택, 인가 완료 후 프론트 리다이렉트 경로)</td></tr>
+<tr><th>Response</th><td>302 Redirect → GitHub OAuth authorize URL</td></tr>
+</table>
+
+<h3 class="endpoint"><span class="badge GET">GET</span><code class="path">/auth/github/callback</code><span class="auth-tag none">인증 불필요</span></h3>
+<div class="desc">GitHub 인가 코드 콜백 처리 → 신규면 회원가입, 기존이면 로그인 처리 후 토큰 발급</div>
+<table class="spec">
+<tr><th>Query</th><td>code, state</td></tr>
+<tr><th>Response 200</th><td><pre class="code-block">{
+  "success": true,
+  "data": {
+    "accessToken": "eyJ...", "refreshToken": "eyJ...",
+    "isNewUser": false,
+    "user": { "userId": "u_2044", "nickname": "ivor-dev", "githubLogin": "ivor" }
+  }
+}</pre></td></tr>
+</table>
+
+<h3 class="endpoint"><span class="badge POST">POST</span><code class="path">/auth/github/link</code><span class="auth-tag">인증 필요</span></h3>
+<div class="desc">기존 로그인 계정에 GitHub 계정 연동 (OAuth code 전달)</div>
+<table class="spec">
+<tr><th>Request Body</th><td><pre class="code-block">{ "code": "gho_authcode..." }</pre></td></tr>
+<tr><th>Response 200</th><td><pre class="code-block">{ "success": true, "data": { "githubLogin": "ivor", "linkedAt": "2026-07-10T12:00:00Z" } }</pre></td></tr>
+<tr><th>에러</th><td>409 ALREADY_LINKED_TO_ANOTHER_ACCOUNT</td></tr>
+</table>
+
+<h3 class="endpoint"><span class="badge DELETE">DELETE</span><code class="path">/auth/github/link</code><span class="auth-tag">인증 필요</span></h3>
+<div class="desc">GitHub 연동 해제</div>
+<table class="spec"><tr><th>Response 200</th><td><pre class="code-block">{ "success": true, "message": "GitHub 연동이 해제되었습니다." }</pre></td></tr></table>
+
+<!-- 3. GOOGLE -->
+<h2 class="section">3. Google 로그인 / 연동</h2>
+
+<h3 class="endpoint"><span class="badge GET">GET</span><code class="path">/auth/google</code><span class="auth-tag none">인증 불필요</span></h3>
+<div class="desc">Google OAuth 인가 페이지로 리다이렉트</div>
+<table class="spec"><tr><th>Query</th><td>redirectUri (선택)</td></tr><tr><th>Response</th><td>302 Redirect → Google OAuth consent URL</td></tr></table>
+
+<h3 class="endpoint"><span class="badge GET">GET</span><code class="path">/auth/google/callback</code><span class="auth-tag none">인증 불필요</span></h3>
+<div class="desc">Google 인가 코드 콜백 처리 → 로그인/회원가입 및 토큰 발급</div>
+<table class="spec">
+<tr><th>Query</th><td>code, state</td></tr>
+<tr><th>Response 200</th><td><pre class="code-block">{
+  "success": true,
+  "data": {
+    "accessToken": "eyJ...", "refreshToken": "eyJ...",
+    "isNewUser": true,
+    "user": { "userId": "u_3055", "nickname": "ivor", "email": "ivor@gmail.com" }
+  }
+}</pre></td></tr>
+</table>
+
+<h3 class="endpoint"><span class="badge POST">POST</span><code class="path">/auth/google/link</code><span class="auth-tag">인증 필요</span></h3>
+<div class="desc">기존 계정에 Google 계정 연동</div>
+<table class="spec">
+<tr><th>Request Body</th><td><pre class="code-block">{ "idToken": "eyJhbGciOi..." }</pre></td></tr>
+<tr><th>Response 200</th><td><pre class="code-block">{ "success": true, "data": { "googleEmail": "ivor@gmail.com", "linkedAt": "2026-07-10T12:00:00Z" } }</pre></td></tr>
+</table>
+
+<h3 class="endpoint"><span class="badge DELETE">DELETE</span><code class="path">/auth/google/link</code><span class="auth-tag">인증 필요</span></h3>
+<div class="desc">Google 연동 해제</div>
+<table class="spec"><tr><th>Response 200</th><td><pre class="code-block">{ "success": true, "message": "Google 연동이 해제되었습니다." }</pre></td></tr></table>
+
+<!-- 4. GUEST -->
+<h2 class="section">4. Guest 권한 처리</h2>
+
+<h3 class="endpoint"><span class="badge POST">POST</span><code class="path">/auth/guest</code><span class="auth-tag none">인증 불필요</span></h3>
+<div class="desc">비로그인 사용자를 위한 임시 Guest 세션 발급 (읽기 전용 토큰)</div>
+<table class="spec">
+<tr><th>Response 200</th><td><pre class="code-block">{
+  "success": true,
+  "data": { "guestToken": "eyJ...", "role": "GUEST", "expiresIn": 86400 }
+}</pre></td></tr>
+</table>
+<div class="note">
+Guest 권한 정책: 게시글/댓글 <b>조회</b>, 조회수 증가 API만 허용됩니다.<br>
+작성 · 수정 · 삭제 · 추천 · 채팅 관련 API는 403 FORBIDDEN(GUEST_NOT_ALLOWED)으로 응답합니다.<br>
+Guest가 회원가입/로그인 시 기존 Guest 활동 이력(조회 기록 등)은 이전되지 않습니다.
+</div>
+
+<!-- 5. POSTS CRUD -->
+<h2 class="section">5. 게시글 CRUD</h2>
+
+<h3 class="endpoint"><span class="badge GET">GET</span><code class="path">/posts</code><span class="auth-tag none">인증 불필요(Guest 가능)</span></h3>
+<div class="desc">게시글 목록 조회 (페이지네이션)</div>
+<table class="spec">
+<tr><th>Query</th><td>page (기본 1), size (기본 20), category (선택)</td></tr>
+<tr><th>Response 200</th><td><pre class="code-block">{
+  "success": true,
+  "data": {
+    "items": [
+      { "postId": "p_501", "title": "Florence 프로젝트 회고",
+        "author": { "userId": "u_1029", "nickname": "ivor" },
+        "viewCount": 128, "likeCount": 12, "commentCount": 4,
+        "createdAt": "2026-07-08T09:00:00Z" }
+    ],
+    "page": 1, "size": 20, "totalElements": 87, "totalPages": 5
+  }
+}</pre></td></tr>
+</table>
+
+<h3 class="endpoint"><span class="badge GET">GET</span><code class="path">/posts/{postId}</code><span class="auth-tag none">인증 불필요(Guest 가능)</span></h3>
+<div class="desc">게시글 상세 조회</div>
+<table class="spec">
+<tr><th>Response 200</th><td><pre class="code-block">{
+  "success": true,
+  "data": {
+    "postId": "p_501", "title": "Florence 프로젝트 회고",
+    "content": "본문 내용...", "category": "PROJECT",
+    "author": { "userId": "u_1029", "nickname": "ivor" },
+    "viewCount": 129, "likeCount": 12, "liked": false,
+    "createdAt": "2026-07-08T09:00:00Z", "updatedAt": "2026-07-08T09:00:00Z"
+  }
+}</pre></td></tr>
+<tr><th>에러</th><td>404 POST_NOT_FOUND</td></tr>
+</table>
+
+<h3 class="endpoint"><span class="badge POST">POST</span><code class="path">/posts</code><span class="auth-tag">인증 필요 (USER)</span></h3>
+<div class="desc">게시글 작성</div>
+<table class="spec">
+<tr><th>Request Body</th><td><pre class="code-block">{
+  "title": "Florence 프로젝트 회고",
+  "content": "본문 내용...",
+  "category": "PROJECT"
+}</pre></td></tr>
+<tr><th>Response 201</th><td><pre class="code-block">{ "success": true, "data": { "postId": "p_501" } }</pre></td></tr>
+<tr><th>에러</th><td>403 GUEST_NOT_ALLOWED · 400 INVALID_REQUEST</td></tr>
+</table>
+
+<h3 class="endpoint"><span class="badge PUT">PUT</span><code class="path">/posts/{postId}</code><span class="auth-tag">인증 필요 (작성자)</span></h3>
+<div class="desc">게시글 수정</div>
+<table class="spec">
+<tr><th>Request Body</th><td><pre class="code-block">{ "title": "수정된 제목", "content": "수정된 본문", "category": "PROJECT" }</pre></td></tr>
+<tr><th>Response 200</th><td><pre class="code-block">{ "success": true, "data": { "postId": "p_501", "updatedAt": "2026-07-10T10:00:00Z" } }</pre></td></tr>
+<tr><th>에러</th><td>403 FORBIDDEN(작성자 아님) · 404 POST_NOT_FOUND</td></tr>
+</table>
+
+<h3 class="endpoint"><span class="badge DELETE">DELETE</span><code class="path">/posts/{postId}</code><span class="auth-tag">인증 필요 (작성자/ADMIN)</span></h3>
+<div class="desc">게시글 삭제 (Soft Delete)</div>
+<table class="spec">
+<tr><th>Response 200</th><td><pre class="code-block">{ "success": true, "message": "게시글이 삭제되었습니다." }</pre></td></tr>
+<tr><th>에러</th><td>403 FORBIDDEN · 404 POST_NOT_FOUND</td></tr>
+</table>
+
+<!-- 6. SEARCH/SORT -->
+<h2 class="section">6. 게시글 검색 / 정렬</h2>
+
+<h3 class="endpoint"><span class="badge GET">GET</span><code class="path">/posts/search</code><span class="auth-tag none">인증 불필요(Guest 가능)</span></h3>
+<div class="desc">제목/본문/작성자 닉네임 기준 검색, 정렬 옵션 지원</div>
+<table class="spec">
+<tr><th>Query</th><td>
+q (검색어), searchType (TITLE|CONTENT|TITLE_CONTENT|AUTHOR, 기본 TITLE_CONTENT),<br>
+sort (LATEST|VIEWS|LIKES|COMMENTS, 기본 LATEST), order (ASC|DESC, 기본 DESC),<br>
+page, size
+</td></tr>
+<tr><th>Response 200</th><td><pre class="code-block">{
+  "success": true,
+  "data": {
+    "items": [ { "postId": "p_501", "title": "Florence 프로젝트 회고", "viewCount": 129, "likeCount": 12 } ],
+    "page": 1, "size": 20, "totalElements": 3
+  }
+}</pre></td></tr>
+</table>
+
+<!-- 7. VIEW COUNT -->
+<h2 class="section">7. 조회수 증가</h2>
+
+<h3 class="endpoint"><span class="badge POST">POST</span><code class="path">/posts/{postId}/view</code><span class="auth-tag none">인증 불필요(Guest 가능)</span></h3>
+<div class="desc">게시글 상세 진입 시 호출, 동일 사용자/IP 기준 일정 시간(예: 24시간) 내 중복 증가 방지</div>
+<table class="spec">
+<tr><th>Response 200</th><td><pre class="code-block">{ "success": true, "data": { "postId": "p_501", "viewCount": 130 } }</pre></td></tr>
+</table>
+
+<!-- 8. LIKE -->
+<h2 class="section">8. 추천 / 추천 취소</h2>
+
+<h3 class="endpoint"><span class="badge POST">POST</span><code class="path">/posts/{postId}/like</code><span class="auth-tag">인증 필요 (USER)</span></h3>
+<div class="desc">게시글 추천 (1인 1회, 중복 요청 시 409)</div>
+<table class="spec">
+<tr><th>Response 200</th><td><pre class="code-block">{ "success": true, "data": { "postId": "p_501", "liked": true, "likeCount": 13 } }</pre></td></tr>
+<tr><th>에러</th><td>409 ALREADY_LIKED · 403 GUEST_NOT_ALLOWED</td></tr>
+</table>
+
+<h3 class="endpoint"><span class="badge DELETE">DELETE</span><code class="path">/posts/{postId}/like</code><span class="auth-tag">인증 필요 (USER)</span></h3>
+<div class="desc">추천 취소</div>
+<table class="spec">
+<tr><th>Response 200</th><td><pre class="code-block">{ "success": true, "data": { "postId": "p_501", "liked": false, "likeCount": 12 } }</pre></td></tr>
+<tr><th>에러</th><td>409 NOT_LIKED_YET</td></tr>
+</table>
+
+<!-- 9. AI SUMMARY -->
+<h2 class="section">9. AI 게시글 요약 생성 및 저장</h2>
+
+<h3 class="endpoint"><span class="badge POST">POST</span><code class="path">/posts/{postId}/summary</code><span class="auth-tag">인증 필요 (USER)</span></h3>
+<div class="desc">LLM을 이용해 게시글 본문을 요약 생성 후 DB 저장 (이미 요약이 있으면 재생성 옵션에 따라 갱신)</div>
+<table class="spec">
+<tr><th>Request Body</th><td><pre class="code-block">{ "regenerate": false }</pre></td></tr>
+<tr><th>Response 201</th><td><pre class="code-block">{
+  "success": true,
+  "data": {
+    "postId": "p_501",
+    "summary": "이 글은 Florence 프로젝트의 프론트엔드 개발 과정과...",
+    "model": "claude-sonnet-5",
+    "generatedAt": "2026-07-10T10:05:00Z"
+  }
+}</pre></td></tr>
+<tr><th>에러</th><td>409 SUMMARY_ALREADY_EXISTS(regenerate=false인 경우) · 502 AI_PROVIDER_ERROR</td></tr>
+</table>
+
+<h3 class="endpoint"><span class="badge GET">GET</span><code class="path">/posts/{postId}/summary</code><span class="auth-tag none">인증 불필요(Guest 가능)</span></h3>
+<div class="desc">저장된 AI 요약 조회</div>
+<table class="spec">
+<tr><th>Response 200</th><td><pre class="code-block">{ "success": true, "data": { "summary": "...", "generatedAt": "2026-07-10T10:05:00Z" } }</pre></td></tr>
+<tr><th>에러</th><td>404 SUMMARY_NOT_FOUND</td></tr>
+</table>
+
+<!-- 10. COMMENTS -->
+<h2 class="section">10. 댓글</h2>
+
+<h3 class="endpoint"><span class="badge GET">GET</span><code class="path">/posts/{postId}/comments</code><span class="auth-tag none">인증 불필요(Guest 가능)</span></h3>
+<div class="desc">댓글 목록 조회 (대댓글 포함 트리 구조)</div>
+<table class="spec">
+<tr><th>Query</th><td>page, size</td></tr>
+<tr><th>Response 200</th><td><pre class="code-block">{
+  "success": true,
+  "data": {
+    "items": [
+      { "commentId": "c_9001", "content": "좋은 글이네요!",
+        "author": { "userId": "u_2044", "nickname": "ivor-dev" },
+        "parentId": null, "createdAt": "2026-07-08T10:00:00Z" }
+    ],
+    "totalElements": 4
+  }
+}</pre></td></tr>
+</table>
+
+<h3 class="endpoint"><span class="badge POST">POST</span><code class="path">/posts/{postId}/comments</code><span class="auth-tag">인증 필요 (USER)</span></h3>
+<div class="desc">댓글/대댓글 작성 (parentId 지정 시 대댓글)</div>
+<table class="spec">
+<tr><th>Request Body</th><td><pre class="code-block">{ "content": "좋은 글이네요!", "parentId": null }</pre></td></tr>
+<tr><th>Response 201</th><td><pre class="code-block">{ "success": true, "data": { "commentId": "c_9001" } }</pre></td></tr>
+<tr><th>에러</th><td>403 GUEST_NOT_ALLOWED · 404 POST_NOT_FOUND</td></tr>
+</table>
+
+<h3 class="endpoint"><span class="badge PUT">PUT</span><code class="path">/comments/{commentId}</code><span class="auth-tag">인증 필요 (작성자)</span></h3>
+<div class="desc">댓글 수정</div>
+<table class="spec">
+<tr><th>Request Body</th><td><pre class="code-block">{ "content": "수정된 댓글 내용" }</pre></td></tr>
+<tr><th>Response 200</th><td><pre class="code-block">{ "success": true, "data": { "commentId": "c_9001", "updatedAt": "2026-07-10T11:00:00Z" } }</pre></td></tr>
+</table>
+
+<h3 class="endpoint"><span class="badge DELETE">DELETE</span><code class="path">/comments/{commentId}</code><span class="auth-tag">인증 필요 (작성자/ADMIN)</span></h3>
+<div class="desc">댓글 삭제 (대댓글이 있는 경우 "삭제된 댓글입니다"로 표시, Soft Delete)</div>
+<table class="spec"><tr><th>Response 200</th><td><pre class="code-block">{ "success": true, "message": "댓글이 삭제되었습니다." }</pre></td></tr></table>
+
+<!-- 11. PROFILE -->
+<h2 class="section">11. 프로필 조회 / 수정</h2>
+
+<h3 class="endpoint"><span class="badge GET">GET</span><code class="path">/users/me</code><span class="auth-tag">인증 필요</span></h3>
+<div class="desc">내 프로필 조회</div>
+<table class="spec">
+<tr><th>Response 200</th><td><pre class="code-block">{
+  "success": true,
+  "data": {
+    "userId": "u_1029", "email": "user@example.com", "nickname": "ivor",
+    "profileImageUrl": "https://cdn.example.com/u_1029.png",
+    "bio": "IT/클라우드 보안 전공, 프론트엔드 개발",
+    "githubLinked": true, "googleLinked": false,
+    "role": "USER", "createdAt": "2025-03-01T00:00:00Z"
+  }
+}</pre></td></tr>
+</table>
+
+<h3 class="endpoint"><span class="badge GET">GET</span><code class="path">/users/{userId}</code><span class="auth-tag none">인증 불필요(Guest 가능)</span></h3>
+<div class="desc">타 사용자 공개 프로필 조회</div>
+<table class="spec">
+<tr><th>Response 200</th><td><pre class="code-block">{ "success": true, "data": { "userId": "u_1029", "nickname": "ivor", "bio": "...", "profileImageUrl": "..." } }</pre></td></tr>
+</table>
+
+<h3 class="endpoint"><span class="badge PUT">PUT</span><code class="path">/users/me</code><span class="auth-tag">인증 필요</span></h3>
+<div class="desc">내 프로필 수정 (닉네임, 소개글, 프로필 이미지)</div>
+<table class="spec">
+<tr><th>Request Body</th><td><pre class="code-block">{
+  "nickname": "ivor_km",
+  "bio": "레이싱과 개발을 좋아합니다.",
+  "profileImageUrl": "https://cdn.example.com/new.png"
+}</pre></td></tr>
+<tr><th>Response 200</th><td><pre class="code-block">{ "success": true, "data": { "userId": "u_1029", "nickname": "ivor_km" } }</pre></td></tr>
+<tr><th>에러</th><td>409 NICKNAME_ALREADY_EXISTS</td></tr>
+</table>
+
+<!-- 12. GITHUB REPO -->
+<h2 class="section">12. GitHub Repository 조회</h2>
+
+<h3 class="endpoint"><span class="badge GET">GET</span><code class="path">/github/repos</code><span class="auth-tag">인증 필요 (GitHub 연동 계정)</span></h3>
+<div class="desc">연동된 GitHub 계정의 Repository 목록 조회 (GitHub API 프록시)</div>
+<table class="spec">
+<tr><th>Query</th><td>sort (updated|created|pushed|full_name, 기본 updated), page, perPage</td></tr>
+<tr><th>Response 200</th><td><pre class="code-block">{
+  "success": true,
+  "data": {
+    "items": [
+      { "repoId": 123456, "name": "Florence", "fullName": "AIM-YSU-Club/Florence",
+        "private": false, "language": "TypeScript", "stargazersCount": 8,
+        "updatedAt": "2026-07-05T03:00:00Z" }
+    ],
+    "page": 1, "perPage": 20
+  }
+}</pre></td></tr>
+<tr><th>에러</th><td>412 GITHUB_NOT_LINKED · 502 GITHUB_API_ERROR</td></tr>
+</table>
+
+<h3 class="endpoint"><span class="badge GET">GET</span><code class="path">/github/repos/{owner}/{repo}</code><span class="auth-tag">인증 필요 (GitHub 연동 계정)</span></h3>
+<div class="desc">특정 Repository 상세 정보 조회</div>
+<table class="spec">
+<tr><th>Response 200</th><td><pre class="code-block">{
+  "success": true,
+  "data": {
+    "name": "Florence", "fullName": "AIM-YSU-Club/Florence",
+    "description": "기후 데이터 기반 의약품 수요 예측 서비스",
+    "defaultBranch": "main", "openIssuesCount": 3, "stargazersCount": 8,
+    "topics": ["react", "typescript", "vite"]
+  }
+}</pre></td></tr>
+<tr><th>에러</th><td>404 REPO_NOT_FOUND</td></tr>
+</table>
+
+<!-- 13. CHAT ROOMS -->
+<h2 class="section">13. 채팅방 생성 / 조회 / 입장</h2>
+
+<h3 class="endpoint"><span class="badge POST">POST</span><code class="path">/chats</code><span class="auth-tag">인증 필요 (USER)</span></h3>
+<div class="desc">채팅방 생성 (PUBLIC 또는 PRIVATE)</div>
+<table class="spec">
+<tr><th>Request Body</th><td><pre class="code-block">{
+  "title": "AIM-YSU 자유채팅방",
+  "type": "PUBLIC",
+  "maxMembers": 50
+}</pre></td></tr>
+<tr><th>Response 201</th><td><pre class="code-block">{
+  "success": true,
+  "data": { "roomId": "r_701", "title": "AIM-YSU 자유채팅방", "type": "PUBLIC", "inviteCode": null }
+}</pre></td></tr>
+</table>
+
+<h3 class="endpoint"><span class="badge GET">GET</span><code class="path">/chats</code><span class="auth-tag">인증 필요 (USER)</span></h3>
+<div class="desc">내가 참여 중인 채팅방 목록 + 공개(PUBLIC) 채팅방 목록 조회</div>
+<table class="spec">
+<tr><th>Query</th><td>scope (MINE|PUBLIC, 기본 MINE), page, size</td></tr>
+<tr><th>Response 200</th><td><pre class="code-block">{
+  "success": true,
+  "data": {
+    "items": [
+      { "roomId": "r_701", "title": "AIM-YSU 자유채팅방", "type": "PUBLIC",
+        "memberCount": 12, "lastMessage": "안녕하세요!", "lastMessageAt": "2026-07-10T09:50:00Z" }
+    ]
+  }
+}</pre></td></tr>
+</table>
+
+<h3 class="endpoint"><span class="badge GET">GET</span><code class="path">/chats/{roomId}</code><span class="auth-tag">인증 필요 (참여자)</span></h3>
+<div class="desc">채팅방 상세 정보 및 최근 메시지 조회</div>
+<table class="spec">
+<tr><th>Query</th><td>messageLimit (기본 50)</td></tr>
+<tr><th>Response 200</th><td><pre class="code-block">{
+  "success": true,
+  "data": {
+    "roomId": "r_701", "title": "AIM-YSU 자유채팅방", "type": "PUBLIC",
+    "members": [ { "userId": "u_1029", "nickname": "ivor" } ],
+    "messages": [
+      { "messageId": "m_5001", "senderId": "u_1029", "content": "안녕하세요!", "sentAt": "2026-07-10T09:50:00Z" }
+    ]
+  }
+}</pre></td></tr>
+<tr><th>에러</th><td>403 NOT_ROOM_MEMBER · 404 ROOM_NOT_FOUND</td></tr>
+</table>
+
+<h3 class="endpoint"><span class="badge POST">POST</span><code class="path">/chats/{roomId}/join</code><span class="auth-tag">인증 필요 (USER)</span></h3>
+<div class="desc">공개 채팅방 입장. PRIVATE 채팅방은 별도 초대 코드 필요(14장 참고)</div>
+<table class="spec">
+<tr><th>Response 200</th><td><pre class="code-block">{ "success": true, "data": { "roomId": "r_701", "joinedAt": "2026-07-10T10:00:00Z" } }</pre></td></tr>
+<tr><th>에러</th><td>403 PRIVATE_ROOM_REQUIRES_INVITE · 409 ALREADY_JOINED · 409 ROOM_FULL</td></tr>
+</table>
+
+<h3 class="endpoint"><span class="badge POST">POST</span><code class="path">/chats/{roomId}/leave</code><span class="auth-tag">인증 필요 (참여자)</span></h3>
+<div class="desc">채팅방 퇴장</div>
+<table class="spec"><tr><th>Response 200</th><td><pre class="code-block">{ "success": true, "message": "채팅방에서 나갔습니다." }</pre></td></tr></table>
+
+<!-- 14. WEBSOCKET -->
+<h2 class="section">14. WebSocket 채팅</h2>
+
+<h3 class="endpoint"><span class="badge WS">WS</span><code class="path">wss://api.example.com/v1/ws/chats/{roomId}?token={accessToken}</code></h3>
+<div class="desc">채팅방 실시간 메시지 송수신용 WebSocket 연결. 연결 시 Access Token으로 인증하며, 방 멤버가 아니면 연결 즉시 종료(4403)됩니다.</div>
+
+<table class="spec">
+<tr><th>Client → Server</th><td>
+<pre class="code-block">// 메시지 전송
+{ "type": "MESSAGE", "content": "안녕하세요!" }
+
+// 입력 중 표시
+{ "type": "TYPING" }</pre>
+</td></tr>
+<tr><th>Server → Client</th><td>
+<pre class="code-block">// 새 메시지 브로드캐스트
+{
+  "type": "MESSAGE",
+  "data": {
+    "messageId": "m_5002", "roomId": "r_701",
+    "senderId": "u_1029", "nickname": "ivor",
+    "content": "안녕하세요!", "sentAt": "2026-07-10T10:01:00Z"
+  }
+}
+
+// 멤버 입/퇴장 알림
+{ "type": "MEMBER_JOINED", "data": { "userId": "u_2044", "nickname": "ivor-dev" } }
+{ "type": "MEMBER_LEFT", "data": { "userId": "u_2044" } }
+
+// 입력 중 표시
+{ "type": "TYPING", "data": { "userId": "u_1029", "nickname": "ivor" } }
+
+// 에러
+{ "type": "ERROR", "data": { "code": "MESSAGE_TOO_LONG", "message": "메시지는 2000자 이하로 작성해주세요." } }</pre>
+</td></tr>
+</table>
+
+<div class="note">
+연결 종료 코드: <b>4401</b> 인증 실패(토큰 만료/누락) · <b>4403</b> 방 멤버 아님 · <b>4409</b> 동일 세션 중복 연결 · <b>1000</b> 정상 종료<br>
+메시지는 WebSocket 브로드캐스트와 동시에 DB에 영속 저장되며, REST <code class="path">GET /chats/{roomId}</code>의 messages 목록과 정합성을 유지합니다.<br>
+클라이언트는 30초 주기로 PING 프레임을 보내고 서버는 PONG으로 응답하여 연결 상태를 유지합니다.
+</div>
+
+<!-- 15. PRIVATE INVITE -->
+<h2 class="section">15. Private 채팅방 초대</h2>
+
+<h3 class="endpoint"><span class="badge POST">POST</span><code class="path">/chats/{roomId}/invite</code><span class="auth-tag">인증 필요 (방장/멤버)</span></h3>
+<div class="desc">PRIVATE 채팅방 초대 코드 생성 또는 특정 사용자 직접 초대</div>
+<table class="spec">
+<tr><th>Request Body (초대코드 생성)</th><td><pre class="code-block">{ "mode": "CODE", "expiresInSec": 3600, "maxUses": 5 }</pre></td></tr>
+<tr><th>Request Body (직접 초대)</th><td><pre class="code-block">{ "mode": "DIRECT", "userIds": ["u_2044", "u_3055"] }</pre></td></tr>
+<tr><th>Response 201</th><td><pre class="code-block">{
+  "success": true,
+  "data": { "inviteCode": "R7QK9X", "expiresAt": "2026-07-10T11:00:00Z", "maxUses": 5, "usedCount": 0 }
+}</pre></td></tr>
+<tr><th>에러</th><td>403 NOT_ROOM_OWNER · 404 ROOM_NOT_FOUND</td></tr>
+</table>
+
+<h3 class="endpoint"><span class="badge POST">POST</span><code class="path">/chats/invite/{inviteCode}/accept</code><span class="auth-tag">인증 필요 (USER)</span></h3>
+<div class="desc">초대 코드를 이용해 Private 채팅방 입장</div>
+<table class="spec">
+<tr><th>Response 200</th><td><pre class="code-block">{ "success": true, "data": { "roomId": "r_702", "joinedAt": "2026-07-10T10:30:00Z" } }</pre></td></tr>
+<tr><th>에러</th><td>410 INVITE_EXPIRED · 409 INVITE_MAX_USES_REACHED · 404 INVITE_NOT_FOUND</td></tr>
+</table>
+
+<h3 class="endpoint"><span class="badge DELETE">DELETE</span><code class="path">/chats/{roomId}/invite/{inviteCode}</code><span class="auth-tag">인증 필요 (방장)</span></h3>
+<div class="desc">초대 코드 즉시 만료 처리</div>
+<table class="spec"><tr><th>Response 200</th><td><pre class="code-block">{ "success": true, "message": "초대 코드가 만료 처리되었습니다." }</pre></td></tr></table>
+
+</body>
+</html>
