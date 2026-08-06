@@ -80,4 +80,8 @@ public class User extends BaseTimeEntity {
         posts.add(post);
         post.assignUser(this);
     }
+
+    public boolean isActive() {
+        return status == UserStatus.ACTIVE;
+    }
 }
