@@ -1,6 +1,7 @@
 package club.index_ysu.reviewme.domain.post;
 
-
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import club.index_ysu.reviewme.domain.post.dto.PostCreateRequest;
 import club.index_ysu.reviewme.domain.post.dto.PostCreateResponse;
 import club.index_ysu.reviewme.global.api.ApiResponse;
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * 게시글 관련 HTTP 요청을 처리하는 컨트롤러
  */
-
+@Tag(name = "Post", description = "게시글 API")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/posts")
@@ -32,6 +33,8 @@ public class PostController {
      * @return 생성된 게시글 정보
      */
 
+
+    @Operation(summary = "게시글 생성",description = "로그인한 사용자가 새로운 게시글을 생성합니다.")
     @PostMapping
     public ResponseEntity<ApiResponse<PostCreateResponse>> createPost(
             @Valid @RequestBody PostCreateRequest request,
