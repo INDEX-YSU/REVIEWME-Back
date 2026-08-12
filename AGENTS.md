@@ -28,3 +28,20 @@ reviewers who did not write it.
    placeholder, or mechanically generated comments.
 6. Tests must document the scenario and expected behavior through descriptive test names and, when
    the setup or purpose is not immediately clear, Javadoc or a focused explanatory comment.
+
+# GitHub writing language
+
+Write all repository-facing GitHub content in Korean so collaborators can review it consistently.
+
+1. Write commit subjects and bodies, pull request titles and descriptions, issue titles and bodies,
+   review comments, and other GitHub messages in Korean.
+2. Keep required conventional commit tokens such as `feat`, `fix`, `docs`, and the optional scope
+   in their prescribed English format, but write the subject that follows the colon in Korean.
+3. Preserve code identifiers, commands, paths, protocol names, and other technical terms in their
+   original form when translating them would reduce clarity.
+
+# Trello workflow
+
+Whenever Trello data must be read or updated, use the `composio-cli` skill and its connected
+Trello toolkit as the primary access path. Do not treat the Codex built-in Trello connector as the
+source of truth for this project when the Composio connection is available.
