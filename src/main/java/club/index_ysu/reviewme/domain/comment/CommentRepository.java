@@ -3,6 +3,10 @@ package club.index_ysu.reviewme.domain.comment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.EntityGraph;
+
+import java.util.List;
+import java.util.Optional;
 
 /**
  * 댓글 트리 조회와 댓글 영속화를 제공하는 Spring Data JPA Repository입니다.
@@ -26,4 +30,18 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
      * @return 게시글의 전체 댓글 수
      */
     long countByPostId(Long postId);
+
+    /** @param postId 게시글 ID
+     * @return 삭제되지 않은 댓글을 작성 순서대로 반환합니다. */
+    @EntityGraph(attributePaths = {"user", "user.profile"})
+    List<Comment> findAllByPostIdAndDeletedAtIsNullOrderByIdAsc(Long postId);
+
+    /** @param id 댓글 ID
+     * @param postId 댓글이 속한 게시글 ID
+     * @return 삭제되지 않은 해당 댓글 */
+    Optional<Comment> findByIdAndPostIdAndDeletedAtIsNull(Long id, Long postId);
+
+    /** @param postId 게시글 ID
+     * @return 사용자에게 표시할 댓글 수 */
+    long countByPostIdAndDeletedAtIsNull(Long postId);
 }

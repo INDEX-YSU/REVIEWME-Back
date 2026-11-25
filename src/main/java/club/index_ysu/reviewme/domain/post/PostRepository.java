@@ -1,7 +1,13 @@
 package club.index_ysu.reviewme.domain.post;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.EntityGraph;
+import org.springframework.data.jpa.repository.Lock;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import jakarta.persistence.LockModeType;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -17,4 +23,14 @@ public interface PostRepository extends JpaRepository<Post, Long> {
      * @return 삭제되지 않은 게시글, 없거나 삭제되었으면 빈 값
      */
     Optional<Post> findByIdAndDeletedAtIsNull(Long id);
+
+    /** @return 삭제되지 않은 게시글과 작성자 프로필의 최신순 목록 */
+    @EntityGraph(attributePaths = {"user", "user.profile"})
+    List<Post> findAllByDeletedAtIsNullOrderByIdDesc();
+
+    /** @param id 게시글 ID
+     * @return 다른 쓰기 작업과 충돌하지 않도록 잠근 활성 게시글 */
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("select p from Post p where p.id = :id and p.deletedAt is null")
+    Optional<Post> findForUpdate(@Param("id") Long id);
 }
