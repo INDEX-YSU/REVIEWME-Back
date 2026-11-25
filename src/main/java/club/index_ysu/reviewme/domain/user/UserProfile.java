@@ -38,6 +38,24 @@ public class UserProfile extends BaseTimeEntity {
     @Column(columnDefinition = "TEXT")
     private String bio;
 
+    @Column(length = 150)
+    private String affiliation;
+
+    @Column(name = "tech_stack", columnDefinition = "TEXT")
+    private String techStack;
+
+    /** 공개 프로필의 편집 가능 필드를 JPA 변경 감지로 저장합니다.
+     * @param nickname 표시 이름
+     * @param bio 자기소개
+     * @param affiliation 소속
+     * @param techStack 줄바꿈으로 구분한 기술 이름 */
+    public void update(String nickname, String bio, String affiliation, String techStack) {
+        this.nickname = nickname;
+        this.bio = bio;
+        this.affiliation = affiliation;
+        this.techStack = techStack;
+    }
+
     @Builder
     private UserProfile(String nickname, String avatarUrl, String bio) {
         this.nickname = nickname;

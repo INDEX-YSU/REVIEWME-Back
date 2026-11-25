@@ -42,3 +42,4 @@ out/
 
 ### Environmental Values ###
 /.env
+/data/

@@ -15,6 +15,35 @@ class   OpenApiIntegrationTest {
     @Autowired MockMvc mockMvc;
 
     @Test
+    void openApiExposesMvpResponsesRequestSchemasAndAccessRules() throws Exception {
+        mockMvc.perform(get("/v3/api-docs"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.paths['/api/v1/posts'].get.responses['200'].content").exists())
+                .andExpect(jsonPath("$.paths['/api/v1/posts'].post.requestBody.content['application/json'].schema").exists())
+                .andExpect(jsonPath("$.paths['/api/v1/posts'].post.responses['201'].content").exists())
+                .andExpect(jsonPath("$.paths['/api/v1/posts/{id}'].get.responses['404'].content").exists())
+                .andExpect(jsonPath("$.paths['/api/v1/posts/{id}'].put.responses['403']").exists())
+                .andExpect(jsonPath("$.paths['/api/v1/posts/{id}'].delete.responses['204']").exists())
+                .andExpect(jsonPath("$.paths['/api/v1/posts/{id}/views'].post.responses['200']").exists())
+                .andExpect(jsonPath("$.paths['/api/v1/posts/{id}/like'].put.security[0].bearerAuth").exists())
+                .andExpect(jsonPath("$.paths['/api/v1/posts/{id}/like'].delete.responses['200']").exists())
+                .andExpect(jsonPath("$.paths['/api/v1/posts/{id}/comments'].get.responses['200']").exists())
+                .andExpect(jsonPath("$.paths['/api/v1/posts/{id}/comments'].post.responses['400'].content").exists())
+                .andExpect(jsonPath("$.paths['/api/v1/posts/{id}/comments/{commentId}'].put.responses['403']").exists())
+                .andExpect(jsonPath("$.paths['/api/v1/posts/{id}/comments/{commentId}'].delete.responses['204']").exists())
+                .andExpect(jsonPath("$.paths['/api/v1/profile'].get.security[0].bearerAuth").exists())
+                .andExpect(jsonPath("$.paths['/api/v1/profile'].put.requestBody.content['application/json'].schema").exists())
+                .andExpect(jsonPath("$.paths['/api/v1/chat/rooms'].get.responses['200']").exists())
+                .andExpect(jsonPath("$.paths['/api/v1/chat/rooms'].post.responses['201']").exists())
+                .andExpect(jsonPath("$.paths['/api/v1/chat/rooms/{id}'].get.responses['403']").exists())
+                .andExpect(jsonPath("$.paths['/api/v1/chat/rooms/{id}/messages'].get.responses['200']").exists())
+                .andExpect(jsonPath("$.paths['/api/v1/chat/rooms/{id}/messages'].post.responses['201']").exists())
+                .andExpect(jsonPath("$.paths['/api/v1/chat/rooms/{id}/messages/{messageId}'].delete.responses['204']").exists())
+                .andExpect(jsonPath("$.paths['/api/v1/chat/rooms/{id}/invites'].post.responses['403']").exists())
+                .andExpect(jsonPath("$.paths['/api/v1/chat/invites/{token}/accept'].post.responses['410'].content").exists());
+    }
+
+    @Test
     void openApiDocumentExposesAuthenticationEndpointsAndSecuritySchemes() throws Exception {
         mockMvc.perform(get("/v3/api-docs"))
                 .andExpect(status().isOk())

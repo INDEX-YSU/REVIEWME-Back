@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -22,6 +23,11 @@ import java.util.List;
 
 @Configuration
 public class SecurityConfig {
+    /** @param http HTTP 보안 설정 빌더
+     * @param jwtFilter Bearer 토큰을 사용자로 변환하는 필터
+     * @param corsConfigurationSource 허용 오리진 설정
+     * @return 공개 읽기와 인증된 쓰기를 구분하는 필터 체인
+     * @throws Exception 보안 체인을 설정할 수 없는 경우 */
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthenticationFilter jwtFilter,
                                             CorsConfigurationSource corsConfigurationSource) throws Exception {
@@ -32,6 +38,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/v1/auth/signup", "/api/v1/auth/login", "/api/v1/auth/refresh").permitAll()
                         .requestMatchers("/api/v1/auth/logout").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/posts", "/api/v1/posts/*", "/api/v1/posts/*/comments",
+                                "/api/v1/chat/rooms", "/api/v1/chat/rooms/*", "/api/v1/chat/rooms/*/messages").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/posts/*/views").permitAll()
                         .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**",
                                 "/api_specification.html", "/error").permitAll()
                         .anyRequest().authenticated())
